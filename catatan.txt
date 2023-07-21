@@ -1,0 +1,30 @@
+Pos Toko Tembakau
+1. User
+    - name 
+    - email 
+    - password 
+    - role (kasir, admin)
+2. Kategori 
+    - nama kategori 
+3. Produk
+    - nama
+    - id kategori
+    - kode 
+    - foto 
+    - keterangan
+    - harga 
+    - stok
+4. Transaksi 
+    - invoice id (tahun,bulan,tanggal,001)
+    - nama pembeli (bisa kosong)
+    - total item
+    - total harga
+    - discount 
+    - harga final 
+    - cash 
+    - kembalian
+5. Transaksi Detail
+    - nama produk
+    - id transaksi
+    - harga 
+    - qty 
