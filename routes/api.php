@@ -3,8 +3,9 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
-use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\ProductController;
+use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\TransactionController;
 
 /*
 |--------------------------------------------------------------------------
@@ -49,5 +50,13 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
         Route::get('/category/{id}', [CategoryController::class, 'show']);
         Route::put('/category/{id}', [CategoryController::class, 'update']);
         Route::delete('/category/{id}', [CategoryController::class, 'destroy']);
+
+        // Transcactions
+        Route::get('/transaction', [TransactionController::class, 'index']);
+        Route::post('/transaction', [TransactionController::class, 'store']);
+        Route::get('/transaction/{id}', [TransactionController::class, 'show']);
+        Route::put('/transaction/{id}', [TransactionController::class, 'update']);
+        Route::delete('/transaction/{id}', [TransactionController::class, 'destroy']);
+        Route::get('/total', [TransactionController::class, 'getTotal']);
     });
 });

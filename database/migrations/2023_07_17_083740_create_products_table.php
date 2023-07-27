@@ -18,7 +18,7 @@ class CreateProductsTable extends Migration
             $table->integer('category')->nullable();
             $table->string('name');
             $table->string('image')->nullable();
-            $table->string('desc')->nullable();
+            $table->longText('desc')->nullable();
             $table->integer('priceBuy');
             $table->integer('priceSell');
             $table->integer('stock')->nullable();

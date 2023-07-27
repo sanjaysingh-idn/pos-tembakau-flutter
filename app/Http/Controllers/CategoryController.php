@@ -9,7 +9,7 @@ class CategoryController extends Controller
 {
     public function index()
     {
-        $category = Category::orderBy('category_name', 'asc')->get();
+        $category = Category::orderBy('name', 'asc')->get();
         return response()->json([
             'categories' => $category
         ], 200);
@@ -19,11 +19,11 @@ class CategoryController extends Controller
     {
         // Validation
         $attr = $request->validate([
-            'category_name'   => 'required|string|unique:categories,category_name',
+            'name'   => 'required|string|unique:categories,name',
         ]);
 
         $category = Category::create([
-            'category_name' => $attr['category_name'],
+            'name' => $attr['name'],
         ]);
 
         return response()->json([

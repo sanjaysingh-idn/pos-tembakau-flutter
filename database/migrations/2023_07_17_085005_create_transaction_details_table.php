@@ -17,8 +17,8 @@ class CreateTransactionDetailsTable extends Migration
             $table->id();
             $table->integer('transaction_id');
             $table->string('product_name');
-            $table->string('product_price');
-            $table->string('qty');
+            $table->integer('product_price');
+            $table->integer('qty');
             $table->timestamps();
         });
     }

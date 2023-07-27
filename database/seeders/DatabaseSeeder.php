@@ -30,11 +30,11 @@ class DatabaseSeeder extends Seeder
         ]);
 
         Category::create([
-            'category_name' => 'Rokok'
+            'name' => 'Rokok'
         ]);
 
         Category::create([
-            'category_name' => 'Tembakau Potong'
+            'name' => 'Tembakau Potong'
         ]);
     }
 }
