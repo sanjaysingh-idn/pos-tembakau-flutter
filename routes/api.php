@@ -53,6 +53,9 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
 
         // Transcactions
         Route::get('/transaction', [TransactionController::class, 'index']);
+        Route::get('/transaction-today', [TransactionController::class, 'today']);
+        Route::get('/transaction-month', [TransactionController::class, 'month']);
+        Route::get('/transaction-year', [TransactionController::class, 'month']);
         Route::post('/transaction', [TransactionController::class, 'store']);
         Route::get('/transaction/{id}', [TransactionController::class, 'show']);
         Route::put('/transaction/{id}', [TransactionController::class, 'update']);

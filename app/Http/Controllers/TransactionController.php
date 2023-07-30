@@ -18,6 +18,42 @@ class TransactionController extends Controller
         ], 200);
     }
 
+    public function today()
+    {
+        $currentDate = Carbon::now();
+        $transaction = Transaction::with('transaction_details')->where('created_at', $currentDate)->latest()->get();
+
+        return response()->json([
+            'transaction' => $transaction
+        ], 200);
+    }
+
+    public function month()
+    {
+        $currentDate = Carbon::now();
+
+        $startOfMonth = $currentDate->copy()->startOfMonth();
+        $endOfMonth = $currentDate->copy()->endOfMonth();
+
+        $transaction = Transaction::with('transaction_details')->whereBetween('created_at', [$startOfMonth, $endOfMonth])->latest()->get();
+        return response()->json([
+            'transaction' => $transaction
+        ], 200);
+    }
+
+    public function year()
+    {
+        $currentDate = Carbon::now();
+
+        $startOfYear = $currentDate->copy()->startOfYear();
+        $endOfYear = $currentDate->copy()->endOfYear();
+
+        $transaction = Transaction::with('transaction_details')->whereBetween('created_at', [$startOfYear, $endOfYear])->latest()->get();
+        return response()->json([
+            'transaction' => $transaction
+        ], 200);
+    }
+
     public function getTotal()
     {
         $currentDate = Carbon::now();
