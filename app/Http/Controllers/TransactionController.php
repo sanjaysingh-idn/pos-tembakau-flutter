@@ -77,23 +77,27 @@ class TransactionController extends Controller
 
     public function getTransactionsByDate(Request $request)
     {
-        print($request);
         $startDate = $request->start_date;
         $endDate = $request->end_date;
 
-        print("Received startDate: $startDate");
-        print("Received endDate: $endDate");
 
 
         // Convert the dates to Carbon instances
         $startDate = Carbon::parse($startDate);
         $endDate = Carbon::parse($endDate);
+        print("Received startDate: $startDate");
+        print("Received endDate: $endDate");
+
+        $startDate = $startDate->toDateTimeString();
+        $endDate = $endDate->toDateTimeString();
 
         // Get the transactions within the date range
         $transactions = Transaction::with('transaction_details')
             ->whereBetween('created_at', [$startDate, $endDate])
             ->latest()
             ->get();
+
+        print("Number of Transactions: " . count($transactions)); // Add this line
 
         return response()->json([
             'transactions' => $transactions,
