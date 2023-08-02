@@ -54,28 +54,53 @@ class ProductController extends Controller
     {
         // Validation
         $attr = $request->validate([
-            'name'          => 'required|string|unique:products,name,' . $id,
-            'category'      => 'required|numeric',
-            'desc'          => 'required|string',
+            'name'          => 'string|unique:products,name,' . $id,
+            'category'      => 'numeric',
+            'desc'          => 'string',
             'image'         => 'image|mimes:jpg,jpeg,png,bmp,gif,svg,webp|max:1024',
-            'priceBuy'      => 'required|numeric',
-            'priceSell'     => 'required|numeric',
-            'stock'         => 'required|numeric',
+            'priceBuy'      => 'numeric',
+            'priceSell'     => 'numeric',
+            'stock'         => 'numeric',
         ]);
 
-        $productData = [
-            'name'      => $attr['name'],
-            'category'  => $attr['category'],
-            'desc'      => $attr['desc'],
-            'priceBuy'  => $attr['priceBuy'],
-            'priceSell' => $attr['priceSell'],
-            'stock'     => $attr['stock'],
-        ];
+        // Prepare the updated product data
+        $productData = [];
+
+        // Check if 'name' exists in $attr before accessing it
+        if (isset($attr['name'])) {
+            $productData['name'] = $attr['name'];
+        }
+
+        // Check if 'category' exists in $attr before accessing it
+        if (isset($attr['category'])) {
+            $productData['category'] = $attr['category'];
+        }
+
+        // Check if 'desc' exists in $attr before accessing it
+        if (isset($attr['desc'])) {
+            $productData['desc'] = $attr['desc'];
+        }
+
+        // Check if 'priceBuy' exists in $attr before accessing it
+        if (isset($attr['priceBuy'])) {
+            $productData['priceBuy'] = $attr['priceBuy'];
+        }
+
+        // Check if 'priceSell' exists in $attr before accessing it
+        if (isset($attr['priceSell'])) {
+            $productData['priceSell'] = $attr['priceSell'];
+        }
+
+        // Check if 'stock' exists in $attr before accessing it
+        if (isset($attr['stock'])) {
+            $productData['stock'] = $attr['stock'];
+        }
 
         // Handle image update if provided
         if ($request->hasFile('image')) {
             $productData['image'] = $request->file('image')->store('image');
         }
+
 
         // Find the product by ID
         $product = Product::findOrFail($id);

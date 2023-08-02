@@ -21,12 +21,33 @@ class TransactionController extends Controller
     public function today()
     {
         $currentDate = Carbon::now();
-        $transaction = Transaction::with('transaction_details')->where('created_at', $currentDate)->latest()->get();
+        $transaction = Transaction::with('transaction_details')->whereDate('created_at', $currentDate)->latest()->get();
 
         return response()->json([
             'transaction' => $transaction
         ], 200);
     }
+
+    public function week()
+    {
+        $currentDate = Carbon::now();
+
+        // Get the start of the current week (assuming Monday is the first day of the week)
+        $startOfWeek = $currentDate->copy()->startOfWeek();
+
+        // Get the end of the current week (assuming Sunday is the last day of the week)
+        $endOfWeek = $currentDate->copy()->endOfWeek();
+
+        $transaction = Transaction::with('transaction_details')
+            ->whereBetween('created_at', [$startOfWeek, $endOfWeek])
+            ->latest()
+            ->get();
+
+        return response()->json([
+            'transaction' => $transaction,
+        ], 200);
+    }
+
 
     public function month()
     {
@@ -54,37 +75,29 @@ class TransactionController extends Controller
         ], 200);
     }
 
-    public function getTotal()
+    public function getTransactionsByDate(Request $request)
     {
-        $currentDate = Carbon::now();
+        print($request);
+        $startDate = $request->start_date;
+        $endDate = $request->end_date;
 
-        // Total and total transactions for today
-        $totalToday = Transaction::whereDate('created_at', $currentDate)
-            ->sum('final_price');
-        $totalTodayTransaction = Transaction::whereDate('created_at', $currentDate)->count();
+        print("Received startDate: $startDate");
+        print("Received endDate: $endDate");
 
-        // Total and total transactions for this month
-        $startOfMonth = $currentDate->copy()->startOfMonth();
-        $endOfMonth = $currentDate->copy()->endOfMonth();
-        $totalThisMonth = Transaction::whereBetween('created_at', [$startOfMonth, $endOfMonth])
-            ->sum('final_price');
-        $totalThisMonthTransaction = Transaction::whereBetween('created_at', [$startOfMonth, $endOfMonth])->count();
 
-        // Total and total transactions for this year
-        $startOfYear = $currentDate->copy()->startOfYear();
-        $endOfYear = $currentDate->copy()->endOfYear();
-        $totalThisYear = Transaction::whereBetween('created_at', [$startOfYear, $endOfYear])
-            ->sum('final_price');
-        $totalThisYearTransaction = Transaction::whereBetween('created_at', [$startOfYear, $endOfYear])->count();
+        // Convert the dates to Carbon instances
+        $startDate = Carbon::parse($startDate);
+        $endDate = Carbon::parse($endDate);
+
+        // Get the transactions within the date range
+        $transactions = Transaction::with('transaction_details')
+            ->whereBetween('created_at', [$startDate, $endDate])
+            ->latest()
+            ->get();
 
         return response()->json([
-            'totalToday' => $totalToday,
-            'totalTodayTransaction' => $totalTodayTransaction,
-            'totalThisMonth' => $totalThisMonth,
-            'totalThisMonthTransaction' => $totalThisMonthTransaction,
-            'totalThisYear' => $totalThisYear,
-            'totalThisYearTransaction' => $totalThisYearTransaction,
-        ], 200, [], JSON_NUMERIC_CHECK);
+            'transactions' => $transactions,
+        ], 200);
     }
 
     public function store(Request $request)
