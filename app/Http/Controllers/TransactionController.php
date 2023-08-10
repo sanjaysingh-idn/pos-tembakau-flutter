@@ -31,11 +31,7 @@ class TransactionController extends Controller
     public function week()
     {
         $currentDate = Carbon::now();
-
-        // Get the start of the current week (assuming Monday is the first day of the week)
         $startOfWeek = $currentDate->copy()->startOfWeek();
-
-        // Get the end of the current week (assuming Sunday is the last day of the week)
         $endOfWeek = $currentDate->copy()->endOfWeek();
 
         $transaction = Transaction::with('transaction_details')
@@ -80,27 +76,20 @@ class TransactionController extends Controller
         $startDate = $request->start_date;
         $endDate = $request->end_date;
 
-
-
         // Convert the dates to Carbon instances
-        $startDate = Carbon::parse($startDate);
-        $endDate = Carbon::parse($endDate);
-        print("Received startDate: $startDate");
-        print("Received endDate: $endDate");
-
-        $startDate = $startDate->toDateTimeString();
-        $endDate = $endDate->toDateTimeString();
+        $startDate = Carbon::parse($startDate)->startOfDay();
+        $endDate = Carbon::parse($endDate)->endOfDay();
 
         // Get the transactions within the date range
         $transactions = Transaction::with('transaction_details')
             ->whereBetween('created_at', [$startDate, $endDate])
             ->latest()
-            ->get();
-
-        print("Number of Transactions: " . count($transactions)); // Add this line
+            ->get(); // Fetch the transactions
 
         return response()->json([
             'transactions' => $transactions,
+            'start_date' => $startDate,
+            'end_date' => $endDate,
         ], 200);
     }
 
@@ -162,5 +151,14 @@ class TransactionController extends Controller
         $invoice_id = $current_date->format('ymd') . $invoice_number;
 
         return $invoice_id;
+    }
+
+    public function getLatestInvoiceId()
+    {
+        $latest_invoice = Transaction::latest('created_at')->first();
+        $getInvoiceId   = $latest_invoice->invoice_id;
+        return response()->json([
+            'invoice_id' => $getInvoiceId,
+        ], 200);
     }
 }

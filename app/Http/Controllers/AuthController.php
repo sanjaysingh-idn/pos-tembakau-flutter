@@ -83,31 +83,29 @@ class AuthController extends Controller
         ]);
     }
 
-    public function edit_user(Request $request, $id)
+    public function edituser(Request $request, $id)
     {
-        // Find the user by ID
-        $user = User::findOrFail($id);
-
-        // Check if the user exists
-        if (!$user) {
-            return response()->json([
-                'message' => 'User not found'
-            ], 404);
-        }
-
         // Validation
         $attr = $request->validate([
-            'name'     => 'required|string',
-            'role'     => 'string',
-            'email'    => 'required|email|unique:users,email,' . $user->id,
+            'name' => 'required|string',
+            'email' => 'required|email|unique:users,email,' . $id,
+            'role' => 'required',
+            'password' => 'sometimes|min:8|confirmed',
         ]);
+
+        $user = User::findOrFail($id);
 
         // Update user data
         $user->name = $attr['name'];
         $user->email = $attr['email'];
         $user->role = $attr['role'];
 
-        // Save the updated user
+        // Check if the password is provided and update it
+        if ($request->has('password')) {
+            $password = $request->input('password');
+            $user->password = bcrypt($password);
+        }
+
         $user->save();
 
         return response()->json([

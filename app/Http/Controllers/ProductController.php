@@ -50,66 +50,43 @@ class ProductController extends Controller
         ], 200);
     }
 
-    public function update(Request $request, $id)
+    public function editproduct(Request $request, $id)
     {
         // Validation
         $attr = $request->validate([
-            'name'          => 'string|unique:products,name,' . $id,
-            'category'      => 'numeric',
-            'desc'          => 'string',
+            'name'          => 'required|string',
+            'category'      => 'required|numeric',
+            'desc'          => 'required|string',
             'image'         => 'image|mimes:jpg,jpeg,png,bmp,gif,svg,webp|max:1024',
-            'priceBuy'      => 'numeric',
-            'priceSell'     => 'numeric',
-            'stock'         => 'numeric',
+            'priceBuy'      => 'required|numeric',
+            'priceSell'     => 'required|numeric',
+            'stock'         => 'required|numeric',
         ]);
 
-        // Prepare the updated product data
-        $productData = [];
+        $product = Product::find($id);
 
-        // Check if 'name' exists in $attr before accessing it
-        if (isset($attr['name'])) {
-            $productData['name'] = $attr['name'];
+        if (!$product) {
+            return response()->json(['message' => 'Product not found'], 404);
         }
 
-        // Check if 'category' exists in $attr before accessing it
-        if (isset($attr['category'])) {
-            $productData['category'] = $attr['category'];
-        }
+        // Update product data
+        $product->name = $attr['name'];
+        $product->category = $attr['category'];
+        $product->desc = $attr['desc'];
+        $product->priceBuy = $attr['priceBuy'];
+        $product->priceSell = $attr['priceSell'];
+        $product->stock = $attr['stock'];
 
-        // Check if 'desc' exists in $attr before accessing it
-        if (isset($attr['desc'])) {
-            $productData['desc'] = $attr['desc'];
-        }
 
-        // Check if 'priceBuy' exists in $attr before accessing it
-        if (isset($attr['priceBuy'])) {
-            $productData['priceBuy'] = $attr['priceBuy'];
-        }
-
-        // Check if 'priceSell' exists in $attr before accessing it
-        if (isset($attr['priceSell'])) {
-            $productData['priceSell'] = $attr['priceSell'];
-        }
-
-        // Check if 'stock' exists in $attr before accessing it
-        if (isset($attr['stock'])) {
-            $productData['stock'] = $attr['stock'];
-        }
-
-        // Handle image update if provided
         if ($request->hasFile('image')) {
-            $productData['image'] = $request->file('image')->store('image');
+            // Delete the old image file (optional if you want to update the image)
+            Storage::delete($product->image);
+            $product->image = $request->file('image')->store('image');
         }
 
-
-        // Find the product by ID
-        $product = Product::findOrFail($id);
-
-        // Update the product data
-        $product->update($productData);
+        $product->save();
 
         return response()->json([
-            'product' => $product,
             'message' => 'Produk berhasil diupdate',
         ], 200);
     }

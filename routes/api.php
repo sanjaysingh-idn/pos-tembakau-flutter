@@ -34,11 +34,13 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::post('/add_user', [AuthController::class, 'add_user']);
     Route::get('/user', [AuthController::class, 'user']);
     Route::put('/user/{id}', [AuthController::class, 'edit_user']);
+    Route::post('/edituser/{id}', [AuthController::class, 'edituser']);
     Route::delete('/user/{id}', [AuthController::class, 'destroy']);
 
     // Product
     Route::get('/product', [ProductController::class, 'index']);
     Route::post('/product', [ProductController::class, 'store']);
+    Route::post('/editproduct/{id}', [ProductController::class, 'editproduct']);
     Route::get('/product/{id}', [ProductController::class, 'show']);
     Route::put('/product/{id}', [ProductController::class, 'update']);
     Route::delete('/product/{id}', [ProductController::class, 'destroy']);
@@ -52,7 +54,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
 
     // Transcactions
     Route::get('/transaction', [TransactionController::class, 'index']);
-    Route::post('/transaction-by-date', [TransactionController::class, 'getTransactionsByDate']);
+    Route::get('/transaction-by-date', [TransactionController::class, 'getTransactionsByDate']);
     Route::get('/transaction-today', [TransactionController::class, 'today']);
     Route::get('/transaction-week', [TransactionController::class, 'week']);
     Route::get('/transaction-month', [TransactionController::class, 'month']);
@@ -62,4 +64,5 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::put('/transaction/{id}', [TransactionController::class, 'update']);
     Route::delete('/transaction/{id}', [TransactionController::class, 'destroy']);
     Route::get('/total', [TransactionController::class, 'getTotal']);
+    Route::get('/get-latest-invoice-id', [TransactionController::class, 'getLatestInvoiceId']);
 });
