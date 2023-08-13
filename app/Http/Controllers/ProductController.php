@@ -26,16 +26,20 @@ class ProductController extends Controller
             'image'         => 'image|mimes:jpg,jpeg,png,bmp,gif,svg,webp|max:1024',
             'priceBuy'      => 'required|numeric',
             'priceSell'     => 'required|numeric',
+            'discount'      => 'numeric',
+            'discountPrice' => 'numeric',
             'stock'         => 'required|numeric',
         ]);
 
         $productData = [
-            'name'      => $attr['name'],
-            'category'  => $attr['category'],
-            'desc'      => $attr['desc'],
-            'priceBuy'  => $attr['priceBuy'],
-            'priceSell' => $attr['priceSell'],
-            'stock'     => $attr['stock'],
+            'name'          => $attr['name'],
+            'category'      => $attr['category'],
+            'desc'          => $attr['desc'],
+            'priceBuy'      => $attr['priceBuy'],
+            'priceSell'     => $attr['priceSell'],
+            'discount'      => $attr['discount'],
+            'discountPrice' => $attr['discountPrice'],
+            'stock'         => $attr['stock'],
         ];
 
         if ($request->hasFile('image')) {
@@ -60,6 +64,8 @@ class ProductController extends Controller
             'image'         => 'image|mimes:jpg,jpeg,png,bmp,gif,svg,webp|max:1024',
             'priceBuy'      => 'required|numeric',
             'priceSell'     => 'required|numeric',
+            'discount'      => 'numeric',
+            'discountPrice' => 'numeric',
             'stock'         => 'required|numeric',
         ]);
 
@@ -70,12 +76,14 @@ class ProductController extends Controller
         }
 
         // Update product data
-        $product->name = $attr['name'];
-        $product->category = $attr['category'];
-        $product->desc = $attr['desc'];
-        $product->priceBuy = $attr['priceBuy'];
-        $product->priceSell = $attr['priceSell'];
-        $product->stock = $attr['stock'];
+        $product->name          = $attr['name'];
+        $product->category      = $attr['category'];
+        $product->desc          = $attr['desc'];
+        $product->priceBuy      = $attr['priceBuy'];
+        $product->priceSell     = $attr['priceSell'];
+        $product->discount      = $attr['discount'];
+        $product->discountPrice = $attr['discountPrice'];
+        $product->stock         = $attr['stock'];
 
 
         if ($request->hasFile('image')) {

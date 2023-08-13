@@ -21,6 +21,8 @@ class CreateProductsTable extends Migration
             $table->longText('desc')->nullable();
             $table->integer('priceBuy');
             $table->integer('priceSell');
+            $table->integer('discount')->nullable();
+            $table->integer('discountPrice')->nullable();
             $table->integer('stock')->nullable();
             $table->timestamps();
         });
