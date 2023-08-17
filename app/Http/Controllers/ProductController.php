@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Product;
+use App\Models\StockReport;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
@@ -47,6 +48,13 @@ class ProductController extends Controller
         }
 
         $product = Product::create($productData);
+
+        // Create a new StockReport entry
+        StockReport::create([
+            'product_id' => $product->id,
+            'stock_first' => $product->stock,
+            'stock_now' => $product->stock,
+        ]);
 
         return response()->json([
             'product' => $product,

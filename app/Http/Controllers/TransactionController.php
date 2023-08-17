@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Carbon\Carbon;
+use App\Models\Product;
 use App\Models\Transaction;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -124,6 +125,12 @@ class TransactionController extends Controller
                 'created_at'        => now(),
                 'updated_at'        => now(),
             ]);
+
+            $product = Product::where('name', $detail['product_name'])->first();
+            if ($product) {
+                $product->stock -= $detail['qty'];
+                $product->save();
+            }
         }
 
         return response()->json([

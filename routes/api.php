@@ -5,6 +5,8 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\CategoryController;
+use App\Http\Controllers\MemberController;
+use App\Http\Controllers\StockReportController;
 use App\Http\Controllers\TransactionController;
 
 /*
@@ -37,6 +39,13 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::post('/edituser/{id}', [AuthController::class, 'edituser']);
     Route::delete('/user/{id}', [AuthController::class, 'destroy']);
 
+    // Member
+    Route::post('/add_member', [MemberController::class, 'store']);
+    Route::get('/member', [MemberController::class, 'index']);
+    Route::put('/member/{id}', [MemberController::class, 'edit_member']);
+    Route::post('/editmember/{id}', [MemberController::class, 'editmember']);
+    Route::delete('/member/{id}', [MemberController::class, 'destroy']);
+
     // Product
     Route::get('/product', [ProductController::class, 'index']);
     Route::post('/product', [ProductController::class, 'store']);
@@ -65,4 +74,7 @@ Route::group(['middleware' => ['auth:sanctum']], function () {
     Route::delete('/transaction/{id}', [TransactionController::class, 'destroy']);
     Route::get('/total', [TransactionController::class, 'getTotal']);
     Route::get('/get-latest-invoice-id', [TransactionController::class, 'getLatestInvoiceId']);
+
+    // Stock Report
+    Route::get('/stockreport', [StockReportController::class, 'index']);
 });
